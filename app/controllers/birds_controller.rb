@@ -38,7 +38,19 @@ class BirdsController < ApplicationController
     bird = Bird.find_by(id: params[:id])
     if bird
       bird.update(likes: bird.likes + 1)
-      render json: bird
+      # render json: bird  --  BAD causes error in (r)=>r.json()
+      render json: {}
+    else
+      render json: { error: "Bird not found" }, status: :not_found
+    end
+  end
+
+  # DELETE /birds/:id
+  def destroy
+    bird = Bird.find(params[:id])
+    if bird
+      bird.destroy
+      head :no_content
     else
       render json: { error: "Bird not found" }, status: :not_found
     end
